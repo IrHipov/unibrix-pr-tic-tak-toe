@@ -78,11 +78,15 @@ const checkCells = (x, y, currentChar) => {
     }
 
     for (let dDist = 1; dDist < WIN_COUNT; dDist++) {
+      let nextStep = false;
+
       if (isCellContainChar({x: x + dPos.x * dDist, y: y + dPos.y * dDist}, currentChar, "First")) {
         dirElementCount[i]++;
+        nextStep = true;
       }
       if (isCellContainChar({x: x - dPos.x * dDist, y: y - dPos.y * dDist}, currentChar, "Second")) {
         dirElementCount[i]++;
+        nextStep = true;
       }
 
       if (dirElementCount[i] === WIN_COUNT - 1) {
@@ -91,6 +95,10 @@ const checkCells = (x, y, currentChar) => {
       } else if (clicks >= AREA_SIZE * AREA_SIZE) {
         gameEnd(0);
         return;
+      }
+
+      if (!nextStep){
+        break;
       }
     }
   }
@@ -118,7 +126,7 @@ const gameEnd = (winnerCode) => {
     if (doReload) {
       window.location.reload();
     }
-  }, 700);
+  }, 400);
 }
 
 const isCellContainChar = (dPos, char, k) => {
@@ -126,6 +134,7 @@ const isCellContainChar = (dPos, char, k) => {
     let cell = cells[dPos.x + AREA_SIZE * dPos.y];
 
     if (cell) {
+      printCell(dPos, char);
       return cell.classList.contains(char);
     }
   }
