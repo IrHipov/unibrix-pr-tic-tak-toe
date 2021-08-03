@@ -165,7 +165,7 @@ const loadGame = () => {
 
   setTimeout(() => {
     let userInput;
-    let msg = "Enter number (3 <= x <= 12)";
+    let msg = "Enter number (3 <= x <= 12):";
 
     do {
       userInput = prompt(msg, '');
