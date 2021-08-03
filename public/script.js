@@ -169,6 +169,9 @@ const loadGame = () => {
 
     do {
       userInput = prompt(msg, '');
+
+      if(!userInput) continue;
+
       userInput = userInput.trim();
 
       if (userInput && userInput == +userInput && userInput >= 3 && userInput <= 12) {
