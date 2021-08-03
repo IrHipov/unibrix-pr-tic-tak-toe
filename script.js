@@ -1,0 +1,179 @@
+let AREA_SIZE = 3, WIN_COUNT = 3;
+const PLAYER_ONE_CLASS = "game-cell-block_p-one";
+const PLAYER_TWO_CLASS = "game-cell-block_p-two";
+const NEXT_PLAYER_CLASS = "score-block__player_next-round";
+let gameArea;
+
+let isFirstCurrentPlayer = true;
+let gameOver = true;
+let cells;
+const playerScoreBoards = document.getElementsByClassName("score-block__player");
+
+let clicks = 0;
+
+const onCellClick = (event) => {
+  if (gameOver) return;
+
+  console.clear();
+  const cell = event.target;
+
+  const cellCharClass = isFirstCurrentPlayer ? PLAYER_ONE_CLASS : PLAYER_TWO_CLASS;
+  cell.classList.add(cellCharClass);
+  cell.classList.remove(!isFirstCurrentPlayer ? PLAYER_ONE_CLASS : PLAYER_TWO_CLASS);
+
+  isFirstCurrentPlayer = !isFirstCurrentPlayer;
+  if (isFirstCurrentPlayer) {
+    playerScoreBoards[0].classList.add(NEXT_PLAYER_CLASS);
+    playerScoreBoards[1].classList.remove(NEXT_PLAYER_CLASS);
+  } else {
+    playerScoreBoards[0].classList.remove(NEXT_PLAYER_CLASS);
+    playerScoreBoards[1].classList.add(NEXT_PLAYER_CLASS);
+  }
+
+  cell.removeEventListener("click", onCellClick);
+
+  const xPos = cell.getAttribute("xPos");
+  const yPos = cell.getAttribute("yPos");
+
+  clicks++;
+
+  setTimeout(checkCells, 0, xPos, yPos, cellCharClass);
+}
+
+const checkCells = (x, y, currentChar) => {
+  let dirElementCount = [0, 0, 0, 0];
+  x = +x;
+  y = +y;
+
+  for (let i = 0; i < 4; i++) {
+    let dPos = {x: 0, y: 0};
+
+    if (i === 0) {
+      //  *
+      //  *
+      //  *
+      dPos.x = 0;
+      dPos.y = -1;
+    }
+    if (i === 1) {
+      //    *
+      //  *
+      //*
+      dPos.x = 1;
+      dPos.y = -1;
+    }
+    if (i === 2) {
+      //
+      //*  *  *
+      //
+      dPos.x = 1;
+      dPos.y = 0;
+    }
+    if (i === 3) {
+      //*
+      //  *
+      //    *
+      dPos.x = 1;
+      dPos.y = 1;
+    }
+
+    for (let dDist = 1; dDist < WIN_COUNT; dDist++) {
+      if (isCellContainChar({x: x + dPos.x * dDist, y: y + dPos.y * dDist}, currentChar, "First")) {
+        dirElementCount[i]++;
+      }
+      if (isCellContainChar({x: x - dPos.x * dDist, y: y - dPos.y * dDist}, currentChar, "Second")) {
+        dirElementCount[i]++;
+      }
+
+      if (dirElementCount[i] === WIN_COUNT - 1) {
+        gameEnd(currentChar === PLAYER_ONE_CLASS ? "Player X WIN!" : "Player O WIN!");
+        return;
+      } else if (clicks >= AREA_SIZE * AREA_SIZE) {
+        gameEnd("Draw!");
+        return;
+      }
+    }
+  }
+}
+
+const gameEnd = (winMSG) => {
+  gameOver = true;
+
+  setTimeout(() => {
+    const doReload = confirm(`Game end. ${winMSG}\n Reload page?`);
+    if (doReload) {
+      window.location.reload();
+    }
+  }, 700);
+}
+
+const isCellContainChar = (dPos, char, k) => {
+  console.log(k);
+  if (dPos.x < AREA_SIZE && dPos.y < AREA_SIZE && dPos.x >= 0 && dPos.y >= 0) {
+    let cell = cells[dPos.x + AREA_SIZE * dPos.y];
+
+    console.log(dPos);
+    console.log(cell);
+    if (cell) {
+      printCell(dPos, char);
+      return cell.classList.contains(char);
+    }
+  }
+  return false;
+}
+
+const printCell = (dPos, char) => {
+  let array = [[AREA_SIZE], [AREA_SIZE]];
+
+  for (let i = 0; i < AREA_SIZE; i++) {
+    array[i] = [];
+
+    for (let j = 0; j < AREA_SIZE; j++) {
+      if (dPos.x === j && dPos.y === i) {
+        array[i][j] = char === PLAYER_ONE_CLASS ? "X" : "Y";
+      } else {
+        array[i][j] = "0";
+      }
+    }
+  }
+  console.table(array);
+}
+
+window.onload = () => {
+  setTimeout(() => {
+    let userInput;
+    let msg = "Enter number";
+
+    do {
+      userInput = prompt(msg, '');
+      userInput = userInput.trim();
+
+      if (userInput && userInput == +userInput && userInput >= 3 && userInput <= 12) {
+        break;
+      } else if (userInput !== null) {
+        msg = 'Wrong number. Enter again';
+      }
+    } while (true);
+
+    AREA_SIZE = +userInput;
+    cells = [];
+    gameArea = document.getElementById("game-area-block");
+
+    for(let i = 0; i < AREA_SIZE; i++){
+      for(let j = 0; j < AREA_SIZE; j++) {
+        const newCell = document.createElement("div");
+        newCell.classList.add("game-cell-block");
+        newCell.setAttribute("xPos", j.toString());
+        newCell.setAttribute("yPos", i.toString());
+
+        cells.push(newCell);
+        newCell.addEventListener("click", onCellClick);
+        gameArea.appendChild(newCell);
+      }
+    }
+
+    gameArea.style.gridTemplateColumns = `repeat(${AREA_SIZE}, 1fr)`;
+
+    gameOver = false;
+  }, 200);
+};
