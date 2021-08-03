@@ -6,10 +6,10 @@ let gameArea;
 
 let isFirstCurrentPlayer = true;
 let gameOver = true;
+let clicks = 0;
 let cells;
 const playerScoreBoards = document.getElementsByClassName("score-block__player");
 
-let clicks = 0;
 
 const onCellClick = (event) => {
   if (gameOver) return;
@@ -76,30 +76,29 @@ const checkCells = (x, y, currentChar) => {
       dPos.x = 1;
       dPos.y = 1;
     }
-
+    console.log(1);
     for (let dDist = 1; dDist < WIN_COUNT; dDist++) {
-      let nextStep = false;
-
       if (isCellContainChar({x: x + dPos.x * dDist, y: y + dPos.y * dDist}, currentChar, "First")) {
         dirElementCount[i]++;
-        nextStep = true;
-      }
-      if (isCellContainChar({x: x - dPos.x * dDist, y: y - dPos.y * dDist}, currentChar, "Second")) {
-        dirElementCount[i]++;
-        nextStep = true;
-      }
-
-      if (dirElementCount[i] === WIN_COUNT - 1) {
-        gameEnd(currentChar === PLAYER_ONE_CLASS ? 1 : 2);
-        return;
-      } else if (clicks >= AREA_SIZE * AREA_SIZE) {
-        gameEnd(0);
-        return;
-      }
-
-      if (!nextStep){
+      } else {
         break;
       }
+    }
+
+    for (let dDist = 1; dDist < WIN_COUNT; dDist++) {
+      if (isCellContainChar({x: x - dPos.x * dDist, y: y - dPos.y * dDist}, currentChar, "Second")) {
+        dirElementCount[i]++;
+      } else {
+        break;
+      }
+    }
+
+    if (dirElementCount[i] >= WIN_COUNT - 1) {
+      gameEnd(currentChar === PLAYER_ONE_CLASS ? 1 : 2);
+      return;
+    } else if (clicks >= AREA_SIZE * AREA_SIZE) {
+      gameEnd(0);
+      return;
     }
   }
 }
@@ -203,6 +202,9 @@ const loadGame = () => {
 }
 
 const reload = () => {
+  isFirstCurrentPlayer = true;
+  gameOver = true;
+  clicks = 0;
   gameArea.innerHTML = "";
   loadGame();
 }
