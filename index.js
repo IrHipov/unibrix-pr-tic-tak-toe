@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
   res.statusCode = 200;
@@ -13,6 +13,6 @@ app.get('/', (req, res) => {
   res.end(fs.readFileSync('./index.html'));
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+app.listen(PORT, () => {
+  console.log(`Example app listening at http://localhost:${PORT}`)
 })
