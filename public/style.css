@@ -64,6 +64,29 @@ body, html{
     font-size: 16px;
     background-color: darkcyan;
 }
+.score-and-button-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.score-and-button-wrapper .score-and-button-wrapper__button{
+    border: none;
+    box-shadow: none;
+
+    width: 100%;
+    font-size: 1.2em;
+
+    cursor: pointer;
+    background-color: bisque;
+    color: darkcyan;
+
+    transition-property: color, background-color;
+    transition-duration: 200ms;
+}
+.score-and-button-wrapper .score-and-button-wrapper__button:hover{
+    background-color: darkcyan;
+    color: bisque;
+}
 /*
 # Score
 */

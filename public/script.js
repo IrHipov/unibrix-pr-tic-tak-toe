@@ -101,16 +101,15 @@ const gameEnd = (winnerCode) => {
   let winText = "Draw!";
   let winnerPlayerClass = PLAYER_ONE_CLASS;
 
-  if(winnerCode !== 0) {
-    if(winnerCode === 1){
+  if (winnerCode !== 0) {
+    if (winnerCode === 1) {
       winText = "Player X WIN!";
       winnerPlayerClass = PLAYER_ONE_CLASS;
-    }else{
+    } else {
       winText = "Player O WIN!";
       winnerPlayerClass = PLAYER_TWO_CLASS;
     }
     const playerWinsCount = window.sessionStorage.getItem(winnerPlayerClass) || 0;
-    // alert(+playerWinsCount)
     window.sessionStorage.setItem(winnerPlayerClass, +playerWinsCount + 1);
   }
 
@@ -123,14 +122,10 @@ const gameEnd = (winnerCode) => {
 }
 
 const isCellContainChar = (dPos, char, k) => {
-  console.log(k);
   if (dPos.x < AREA_SIZE && dPos.y < AREA_SIZE && dPos.x >= 0 && dPos.y >= 0) {
     let cell = cells[dPos.x + AREA_SIZE * dPos.y];
 
-    console.log(dPos);
-    console.log(cell);
     if (cell) {
-      printCell(dPos, char);
       return cell.classList.contains(char);
     }
   }
@@ -154,7 +149,7 @@ const printCell = (dPos, char) => {
   console.table(array);
 }
 
-window.onload = () => {
+const loadGame = () => {
   const player1 = document.getElementById("x-player-score");
   const player2 = document.getElementById("o-player-score");
   player1.innerText = window.sessionStorage.getItem(PLAYER_ONE_CLASS) || 0;
@@ -162,7 +157,7 @@ window.onload = () => {
 
   setTimeout(() => {
     let userInput;
-    let msg = "Enter number";
+    let msg = "Enter number (3 <= x <= 12)";
 
     do {
       userInput = prompt(msg, '');
@@ -179,8 +174,8 @@ window.onload = () => {
     cells = [];
     gameArea = document.getElementById("game-area-block");
 
-    for(let i = 0; i < AREA_SIZE; i++){
-      for(let j = 0; j < AREA_SIZE; j++) {
+    for (let i = 0; i < AREA_SIZE; i++) {
+      for (let j = 0; j < AREA_SIZE; j++) {
         const newCell = document.createElement("div");
         newCell.classList.add("game-cell-block");
         newCell.setAttribute("xPos", j.toString());
@@ -196,4 +191,17 @@ window.onload = () => {
 
     gameOver = false;
   }, 200);
+}
+
+const reload = () => {
+  gameArea.innerHTML = "";
+  loadGame();
+}
+
+window.onload = () => {
+  loadGame();
+  document.getElementById("reload-button")
+    .addEventListener('click', () => {
+      reload();
+    });
 };

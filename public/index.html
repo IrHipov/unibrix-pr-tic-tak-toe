@@ -8,15 +8,18 @@
 </head>
 <body>
 <div class="root-container">
-  <div class="score-block">
-    <div class="score-block__player score-block__player_margin-right score-block__player_next-round">
-      <p id="x-player-score" class="score-block__text">0</p>
-      <img class="score-block__player_img-size score-block__player_one" src="image/ic_x.svg" alt="Player one">
+  <div class="score-and-button-wrapper">
+    <div class="score-block">
+      <div class="score-block__player score-block__player_margin-right score-block__player_next-round">
+        <p id="x-player-score" class="score-block__text">0</p>
+        <img class="score-block__player_img-size score-block__player_one" src="image/ic_x.svg" alt="Player one">
+      </div>
+      <div class="score-block__player">
+        <img class="score-block__player_img-size score-block__player_two" src="image/ic_o.svg" alt="Player two">
+        <p id="o-player-score" class="score-block__text">0</p>
+      </div>
     </div>
-    <div class="score-block__player">
-      <img class="score-block__player_img-size score-block__player_two" src="image/ic_o.svg" alt="Player two">
-      <p id="o-player-score" class="score-block__text">0</p>
-    </div>
+    <button id="reload-button" class="score-and-button-wrapper__button">New Game</button>
   </div>
   <div id="game-area-block" class="game-area-block">
   </div>
