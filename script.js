@@ -86,21 +86,36 @@ const checkCells = (x, y, currentChar) => {
       }
 
       if (dirElementCount[i] === WIN_COUNT - 1) {
-        gameEnd(currentChar === PLAYER_ONE_CLASS ? "Player X WIN!" : "Player O WIN!");
+        gameEnd(currentChar === PLAYER_ONE_CLASS ? 1 : 2);
         return;
       } else if (clicks >= AREA_SIZE * AREA_SIZE) {
-        gameEnd("Draw!");
+        gameEnd(0);
         return;
       }
     }
   }
 }
 
-const gameEnd = (winMSG) => {
+const gameEnd = (winnerCode) => {
   gameOver = true;
+  let winText = "Draw!";
+  let winnerPlayerClass = PLAYER_ONE_CLASS;
+
+  if(winnerCode !== 0) {
+    if(winnerCode === 1){
+      winText = "Player X WIN!";
+      winnerPlayerClass = PLAYER_ONE_CLASS;
+    }else{
+      winText = "Player O WIN!";
+      winnerPlayerClass = PLAYER_TWO_CLASS;
+    }
+    const playerWinsCount = window.sessionStorage.getItem(winnerPlayerClass) || 0;
+    // alert(+playerWinsCount)
+    window.sessionStorage.setItem(winnerPlayerClass, +playerWinsCount + 1);
+  }
 
   setTimeout(() => {
-    const doReload = confirm(`Game end. ${winMSG}\n Reload page?`);
+    const doReload = confirm(`Game end. ${winText}\n Reload page?`);
     if (doReload) {
       window.location.reload();
     }
@@ -140,6 +155,11 @@ const printCell = (dPos, char) => {
 }
 
 window.onload = () => {
+  const player1 = document.getElementById("x-player-score");
+  const player2 = document.getElementById("o-player-score");
+  player1.innerText = window.sessionStorage.getItem(PLAYER_ONE_CLASS) || 0;
+  player2.innerText = window.sessionStorage.getItem(PLAYER_TWO_CLASS) || 0;
+
   setTimeout(() => {
     let userInput;
     let msg = "Enter number";

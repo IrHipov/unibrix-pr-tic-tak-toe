@@ -46,6 +46,9 @@ table {
 :root{
     --white-fond: #ffd9b8;
 }
+body, html{
+    height: 100%;
+}
 /*
 # Wrapper
 */
@@ -55,8 +58,8 @@ table {
 
     align-items: center;
 
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 
     font-size: 16px;
     background-color: darkcyan;
@@ -95,14 +98,6 @@ table {
 # Game cell
 */
 .game-cell-block{
-    /*width: 10%;*/
-    /*height: 10%;*/
-
-    /*max-width: calc(50vmin / 3);*/
-    /*max-height: calc(50vmin / 3);*/
-
-    flex-grow: 1;
-
     background-color: antiquewhite;
 
     margin: 1px;
@@ -132,7 +127,6 @@ table {
     margin-top: 10%;
 
     display: grid;
-    /*flex-wrap: wrap;*/
 
     box-shadow: 0 0 28px 3px rgba(255, 255, 255, 0.22);
 }
@@ -146,5 +140,12 @@ table {
 
 }
 .root-container * {
-    border: 1px solid black;
+    /*border: 1px solid black;*/
+}
+
+@media (max-width: 245px) {
+    .game-area-block{
+        width: 90vmin;
+        height: 90vmin;
+    }
 }
