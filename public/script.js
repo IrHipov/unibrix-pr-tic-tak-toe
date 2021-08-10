@@ -2,8 +2,8 @@ let AREA_SIZE = 3, WIN_COUNT = 3;
 const PLAYER_ONE_CLASS = "game-cell-block_p-one";
 const PLAYER_TWO_CLASS = "game-cell-block_p-two";
 const NEXT_PLAYER_CLASS = "score-block__player_next-round";
-let gameArea;
 
+let gameArea;
 let isFirstCurrentPlayer = true;
 let gameOver = true;
 let clicks = 0;
@@ -45,7 +45,7 @@ const checkCells = (x, y, currentChar) => {
   x = +x;
   y = +y;
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < dirElementCount.length; i++) {
     let dPos = {x: 0, y: 0};
 
     if (i === 0) {
@@ -78,7 +78,7 @@ const checkCells = (x, y, currentChar) => {
     }
     console.log(1);
     for (let dDist = 1; dDist < WIN_COUNT; dDist++) {
-      if (isCellContainChar({x: x + dPos.x * dDist, y: y + dPos.y * dDist}, currentChar, "First")) {
+      if (isCellContainChar({x: x + dPos.x * dDist, y: y + dPos.y * dDist}, currentChar, cells)) {
         dirElementCount[i]++;
       } else {
         break;
@@ -86,7 +86,7 @@ const checkCells = (x, y, currentChar) => {
     }
 
     for (let dDist = 1; dDist < WIN_COUNT; dDist++) {
-      if (isCellContainChar({x: x - dPos.x * dDist, y: y - dPos.y * dDist}, currentChar, "Second")) {
+      if (isCellContainChar({x: x - dPos.x * dDist, y: y - dPos.y * dDist}, currentChar, cells)) {
         dirElementCount[i]++;
       } else {
         break;
@@ -128,7 +128,7 @@ const gameEnd = (winnerCode) => {
   }, 400);
 }
 
-const isCellContainChar = (dPos, char, k) => {
+const isCellContainChar = (dPos, char, cells) => {
   if (dPos.x < AREA_SIZE && dPos.y < AREA_SIZE && dPos.x >= 0 && dPos.y >= 0) {
     let cell = cells[dPos.x + AREA_SIZE * dPos.y];
 
